@@ -1,0 +1,470 @@
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+<script>
+    // function Archiver() {
+    //     let value = null
+    //     let archive = []
+
+    //     Object.defineProperty(this, 'num', {
+    //         get: function () {
+    //             console.log('get')
+    //             return value
+    //         },
+    //         set: function (value) {
+    //             value = value
+    //             archive.push({ val: value })
+    //         }
+    //     })
+
+    //     this.getArchive = function () {
+    //         return archive
+    //     }
+    // }
+    // let arc = new Archiver()
+    // arc.num
+    // arc.num = 11
+    // arc.num = 13
+    // console.log(arc.getArchive())
+
+    // (function () {
+    //     let root = this
+    //     function watch(obj, name, func) {
+    //         let value = obj[name]
+
+    //         Object.defineProperty(obj, name, {
+    //             get: function() {
+    //                 return value
+    //             },
+    //             set: function(newValue) {
+    //                 value = newValue
+    //                 func(value)
+    //             }
+    //         })
+
+    //         if (value) obj[name] = value
+    //     }
+    //     this.watch = watch
+    // })()
+
+    // let a = {
+    //     value: 'handsome'
+    // }
+
+    // function person(name, age) {
+    //     console.log(name)
+    //     console.log(age)
+    //     console.log(this.value)
+    // }
+
+    // person.call(a, 'han', 23) // han 23 handsome
+    // person.apply(a, ['han', 23]) // han 23 handsome
+
+    // let list = []
+    // Array.apply(null, { length: 3 }).map((item, page) => {
+    //             page = page + 1
+    //             list.push({ code: page, name: `第${page}页` })
+    //         })
+
+    // console.log('list', list)
+
+    // function* helloWorld() {
+    //     yield 'hello'
+    //     yield 'world'
+    //     return 'ending'
+    // }
+
+    // let hw = helloWorld()
+    // console.log('hw', hw)
+    // let a = hw.next()
+    // console.log(a)
+    // let b = hw.next()
+    // console.log(b)
+    // let c = hw.next()
+    // console.log(c)
+
+
+    // function* gen() {
+    //     let a = yield 123 + 456
+    //     console.log('a', a)
+    //     yield a * 2
+    //     return a
+    // }
+    // let g = gen()
+    // let aa = g.next()
+    // console.log(aa)
+    // let bb = g.next(1)
+    // console.log(bb)
+    // let cc = g.next()
+    // console.log(cc)
+
+    // Function.prototype.myCall = function (context) {
+    //     console.log(this)
+    //     console.log(...arguments)
+    //     context = context || window
+    //     context.fn = this
+    //     let args = [...arguments].slice(1)
+    //     console.log('args', args)
+    //     let result = context.fn(...args)
+    //     console.log('result', result)
+    //     // delete context.fn
+    //     return result
+    // }
+    // person.myCall(a, 'han', 23)
+
+    // Function.prototype.MyApply = function (context) {
+    //     console.log(this)
+    //     console.log(...arguments)
+    //     context = context || window
+    //     context.fn = this
+    //     console.log(...arguments)
+
+    //     let result
+    //     if (arguments[1]) {
+    //         result = context.fn(...arguments[1])
+    //     } else {
+    //         result = context.fn()
+    //     }
+    //     delete context.fn
+    //     return result
+    // }
+
+    // person.MyApply(a, ['han', 23])
+
+    // const sharedPropertyDefinition = {
+    //     enumerable: true,
+    //     configurable: true,
+    //     get: null,
+    //     set: null
+    // }
+
+    // function proxy(target, sourceKey, key) {
+    //     sharedPropertyDefinition.get = function proxyGetter() {
+    //         return this[sourceKey][key]
+    //     }
+    //     sharedPropertyDefinition.set = function proxySetter(val) {
+    //         this[sourceKey][key] = val
+    //     }
+    //     Object.defineProperty(target, key, sharedPropertyDefinition)
+    // }
+
+    // function Data() {
+    //     this.data = {
+    //         a: 1,
+    //         b: 2
+    //     }
+
+    //     for (let key in this.data) {
+    //         proxy(this, 'data', key)
+    //     }
+
+
+    // }
+
+    // let date = new Data()
+    // console.log(date.a, date.b, date.data.a, date.data.b)
+
+    // date.a = 10
+    // date.b = 20
+    // console.log(date.a, date.b, date.data.a, date.data.b)
+
+
+
+    // function a() {
+    //     return {
+    //         a: 1,
+    //         b: 2
+    //     }
+    // }
+    // let b = a.call(this)
+    // console.log('b', b)
+
+
+    // const ins = new Vue({
+    //     data: {
+    //         a: 1
+    //     }
+    // })
+
+    // ins.$watch('a', () => {
+    //     console.log('修改了 a')
+    // })
+
+    // 响应式
+    // let Target = null
+    // const data = {
+    //     a: {
+    //         a: 10
+    //     },
+    //     b: 2
+    // }
+    // // for (let key in data) {
+    //     const dep = []
+    //     let val = data[key]
+    //     Object.defineProperty(data, key, {
+    //         set(newVal) {
+    //             if (newVal === val) return
+    //             val = newVal
+    //             dep.forEach(fn => fn())
+    //         },
+    //         get() {
+    //             dep.push(Target)
+    //             return val
+    //         }
+    //     })
+    // }
+
+    // function $watch(exp, fn) {
+    //     Target = fn
+    //     let pathArr,
+    //         obj = data
+    //     // 如果 exp 是函数，直接执行该函数
+    //     if (typeof exp === 'function') {
+    //         exp()
+    //         return
+    //     }
+    //     // 检查 exp 中是否包含 .
+    //     if (/\./.test(exp)) {
+    //         // 将字符串转为数组，例：'a.b' => ['a', 'b']
+    //         pathArr = exp.split('.')
+    //         // 使用循环读取到 data.a.b
+    //         pathArr.forEach(p => {
+    //             obj = obj[p]
+    //         })
+    //         return
+    //     }
+    //     data[exp]
+    // }
+
+    // $watch('a', () => {
+    //     console.log('第一个依赖')
+    // })
+
+    // $watch('b', () => {
+    //     console.log('第二个依赖')
+    // })
+
+    // function walk(data) {
+    //     for (let key in data) {
+    //         const dep = []
+    //         let val = data[key]
+    //         // 如果 val 是对象，递归调用 walk 函数将其转为访问器属性
+    //         const nativeString = Object.prototype.toString.call(val)
+    //         if (nativeString === '[object Object]') {
+    //             walk(val)
+    //         }
+
+    //         Object.defineProperty(data, key, {
+    //             set(newVal) {
+    //                 if (newVal === val) return
+    //                 val = newVal
+    //                 dep.forEach(fn => fn())
+    //             },
+    //             get() {
+    //                 dep.push(Target)
+    //                 return val
+    //             }
+    //         })
+    //     }
+    // }
+
+    // walk(data)
+
+    // $watch('a.a', () => {
+    //     console.log('第一个依赖')
+    // })
+
+    // function protoAugment(target, src) {
+    //     target.__proto__ = src
+    // }
+
+    // function copyAugment(target, src, keys) {
+    //     for (let i = 0, l = keys.length; i < l; i++) {
+    //         const key = keys[i]
+    //         def(target, key, src[key])
+    //     }
+    // }
+
+    // function defineReactive(obj, key, val, customSetter, shallow) {
+    //     const dep = new Dep()
+
+    //     const property = Object.getOwnPropertyDescriptor(obj, key)
+    //     if (property && property.configurable === false) {
+    //         return
+    //     }
+
+    //     const getter = property && property.get
+    //     const setter = property && property.set
+
+    //     if ((!getter || setter) && arguments.length === 2) {
+    //         val = obj[key]
+    //     }
+
+    //     let childOb = !shallow && observe(val)
+    //     Object.defineProperty(obj, key, {
+    //         enumerable: true,
+    //         configurable: true,
+    //         get: function reactiveGetter() {
+    //             const value = getter ? getter.call(obj) : val
+    //             if (dep.Target) {
+    //                 dep.depend()
+    //                 if (childOb) {
+    //                     childOb.dep.depend()
+    //                     if (Array.isArray(value)) {
+    //                         dependArray(value)
+    //                     }
+    //                 }
+    //             }
+    //             return value
+    //         },
+    //         set: function reactiveSetter(param) {
+    //             const value = getter ? getter.call(obj) : val
+    //             if (newVal === value || (newVal !== newVal && value !== value)) { // NaN === NaN // false
+    //                 return
+    //             }
+    //             if (getter && !setter) return
+    //             if (process.env.NODE_ENV !== 'production' && customSetter) {
+    //                 customSetter()
+    //             }
+    //             if (setter) {
+    //                 setter.call(obj, newVal)
+    //             } else {
+    //                 val = newVal
+    //             }
+    //             childOb = !shallow && observe(newVal)
+    //             dep.notify()
+    //         }
+    //     })
+    // }
+
+    // class Observer {
+    //     constructor(value) {
+    //         this.value = value
+    //         this.dep = new Dep()
+    //         this.vmCount = 0
+    //         def(value, '__ob__', this)
+    //         if (Array.isArray(value)) {
+    //             if (hasProto) {
+    //                 protoAugment(value, arrayMethods)
+    //             } else {
+    //                 copyAugment(value, arrayMethods, arrayKeys)
+    //             }
+    //             this.observeArray(value)
+    //         } else {
+    //             this.walk(value)
+    //         }
+    //     }
+
+    //     walk(obj) {
+    //         const keys = Object.keys(obj)
+    //         for (let i = 0; i < keys.length; i++) {
+    //             defineReactive(obj, keys[i])
+    //         }
+    //     }
+
+    //     observeArray(items) {
+    //         for (let i = 0, l = items.length; i < l; i++) {
+    //             observe(items[i])
+    //         }
+    //     }
+    // }
+
+    // function def(obj, key, val, enumerable) {
+    //     Object.defineProperty(obj, key, {
+    //         value: val,
+    //         enumerable: !!enumerable,
+    //         writable: true,
+    //         configurable: true
+    //     })
+    // }
+
+    // function remove(arr, item) {
+    //     if (arr.length && arr.indexOf(item) > -1) {
+    //         return arr.splice(index, 1)
+    //     }
+    // }
+
+    // let uid = 0
+    // class Dep {
+    //     constructor() {
+    //         this.id = uid++
+    //         this.subs = []
+    //     }
+
+    //     addSub(sub) {
+    //         this.sub.push(sub)
+    //     }
+
+    //     removeSub(sub) {
+    //         remove(this.subs, sub)
+    //     }
+
+    //     depend() {
+    //         if (Dep.target) {
+    //             Dep.target.addSub(this)
+    //         }
+    //     }
+
+    //     notify() {
+    //         const subs = this.subs.slice()
+    //         subs.sort((a, b) => a.id - b.id)
+    //         for (let i = 0; i < subs.length; i++) {
+    //             subs[i].update()
+    //         }
+    //     }
+    // }
+
+    // Dep.target = null
+    // const targetStack = []
+    // function pushTarget(target) {
+    //     targetStack.push(target)
+    //     Dep.target = target
+    // }
+
+    // function popTarget() {
+    //     targetStack.pop()
+    //     Dep.target = targetStack[targetStack.length - 1]
+    // }
+
+    function generator(cb) {
+        return (function () {
+            var object = {
+                next: 0,
+                stop: function () { }
+            };
+
+            return {
+                next: function () {
+                    var ret = cb(object);
+                    if (ret === undefined) return { value: undefined, done: true };
+                    return {
+                        value: ret,
+                        done: false
+                    };
+                }
+            };
+        })();
+    }
+    function test() {
+        var a;
+        return generator(function (_context) {
+            while (1) {
+                switch ((_context.prev = _context.next)) {
+                    // 可以发现通过 yield 将代码分割成几块
+                    // 每次执行 next 函数就执行一块代码
+                    // 并且表明下次需要执行哪块代码
+                    case 0:
+                        a = 1 + 2;
+                        _context.next = 4;
+                        return 2;
+                    case 4:
+                        _context.next = 6;
+                        return 3;
+                    // 执行完毕
+                    case 6:
+                    case "end":
+                        return _context.stop();
+                }
+            }
+        });
+    }
+    test()
+</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tail Call</title>
+</head>
+<body>
+    <script>
+        function factorial(n) {
+            if (n === 1) return 1;
+            return n * factorial(n - 1);
+        }
+
+        function factorial2(n, total) {
+            if (n === 1) return total
+            return factorial2(n -1, n * total)
+        } 
+
+        function Fibonacci(n) {
+            if (n <= 1) return 1
+            return Fibonacci(n - 1) + Fibonacci(n - 2)
+        }
+
+        Fibonacci(10)
+        let a = Fibonacci(500)
+        console.log(a)
+    </script>
+</body>
+</html>

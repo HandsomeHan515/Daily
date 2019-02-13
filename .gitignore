@@ -1,0 +1,8 @@
+node_modules
+*.log
+*.log.*
+*.orig
+.idea
+.happypack
+build
+.DS_Store
