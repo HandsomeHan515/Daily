@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let data = {
+            firstName: 'Jon',
+            lastName: 'Snow',
+            age: 25
+        }
+        function makeReactive(obj, key) {
+            let val = obj[key]
+
+            Object.defineProperty(obj, key, {
+                get() {
+                    return val
+                },
+                set(newVal) {
+                    val = newVal
+                    // notify(key)
+                }
+            })
+        }
+
+        function observeData(obj) {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    makeReactive(obj, key)
+                }
+            }
+        }
+
+        observeData(data)
+    </script>
+</body>
+
+</html>

@@ -1880,7 +1880,6 @@
     // PhantomJS
     MessageChannel.toString() === '[object MessageChannelConstructor]'
   )) {
-    console.log('fix me')
     var channel = new MessageChannel();
     var port = channel.port2;
     channel.port1.onmessage = flushCallbacks;
@@ -1897,7 +1896,6 @@
   // Determine microtask defer implementation.
   /* istanbul ignore next, $flow-disable-line */
   if (typeof Promise !== 'undefined' && isNative(Promise)) {
-      console.log('fix you')
     var p = Promise.resolve();
     microTimerFunc = function () {
       p.then(flushCallbacks);
@@ -11076,9 +11074,7 @@
     </script>
     <style>
       #example {
-        background-color: blue;
         height: 100px;
-        overflow-y: scroll;
       }
     </style>
 </head>
@@ -11086,13 +11082,7 @@
 <body>
     <div id="app">
         <div id="example" ref='name'>
-            <div>123</div>
-            <div>123</div>
-            <div>123</div>
-            <div>123</div>
-            <div>123</div>
-            <div>123</div>
-            <div>456</div>
+            {{test}}
         </div>
     </div>
     <script>
@@ -11101,35 +11091,29 @@
             data: {
                 test: 'begin',
             },
-            computed: {
-                name () {
-                  this.$nextTick(() => {
-                    return this.test + '123'
-                  })
-                }
+            beforeCreate() {
+              // this hook is called immediately when the component is initialized. 
+              // However, events and watchers have not been set up yet and any data or methods cannot be called
+              console.log('beforeCreate test', this.test)
             },
-            watch: {
+            created() {
+              // this hook called right after the component is initialized. 
+              // Everything in this component is accessible except for the DOM elements so $el will return null.
+              console.log('created test', this.$el)
             },
-            methods: {
-                handleClick() {
-                    this.test = 'end';
-                    console.log('script')
-                    this.$nextTick(function () {
-                        console.log('nextTick')
-                    })
-                    Promise.resolve().then(function () {
-                        console.log('promise')
-                    })
-                }
+            beforeMount() {
+              // this hook is called right before the mounting. 
+              // The DOM elements of the component are still not accessible
+              console.log('beforeMount test', this.$el, this.$refs.name)
             },
-            mounted () {
-              this.$refs.name.scrollTop = '30px'
+            mounted() {
+              // this hook is called after the instance has been mounted
+              // meaning that the DOM elements will be accessible by using vm.$el. 
+              console.log('mounted test', this.$el, this.$refs.name)
+              debugger
+              this.test = 10
             }
         })
-
-        ~function() {//运算符~ 把函数看成一个整体  //换位非运算符 计算方式：先改变值得符号，再－1；
-          alert('5');
-        }();    
     </script>
 </body>
 
