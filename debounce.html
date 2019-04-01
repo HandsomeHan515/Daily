@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div id="container"></div>
+    <div id="container">按钮</div>
     <script>
         var count = 1;
         var container = document.getElementById('container');
@@ -31,22 +31,21 @@
         };
 
         function debounce(func, time, immediate) {
-            let timer = null, result
+            let timer = null
+            
             return function() {
-                let _this = this
-                let args = arguments
                 clearTimeout(timer)
 
                 if (immediate) {
                     if (!timer) {
-                        func.apply(_this, args)
+                        func.call(this, arguments)
                     }
                     timer = setTimeout(function() {
                         timer = null
                     }, time)
                 } else {
                     timer = setTimeout(function() {
-                        func.apply(_this, args)
+                        func.call(this, arguments)
                     }, time)
                 }
             }

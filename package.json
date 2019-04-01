@@ -1,0 +1,12 @@
+{
+  "name": "daily",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/HandsomeHan515/Daily.git",
+  "author": "hanshuai <hanshuai@baiwang.com>",
+  "license": "MIT",
+  "dependencies": {
+    "hyperscript": "^2.0.2",
+    "list-diff2": "^0.1.4"
+  }
+}
