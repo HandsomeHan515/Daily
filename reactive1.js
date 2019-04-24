@@ -13,23 +13,11 @@ function replay () {
 }
 
 // Save this code
-target = function () {
-    total = price * quantity
-}
-// Later on, run stored code again
+target = () => { total = price * quantity }
 
 record()
-console.log(storage)
-
 target()
-
-console.log(total)
 price = 20
+console.log(total)
 replay()
 console.log(total)
-
-
-
-
-
-

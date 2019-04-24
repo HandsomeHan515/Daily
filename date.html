@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function getDates(year, month) {
+            const arr = []
+            const time = new Date(year, month) // 当月第一天
+
+            console.log('time', time)
+
+            time.setDate(0) // 把时间切换到上个月最后一天
+            console.log('last month last day', time)
+            console.log(time.getDay())
+            const lastMonthLength = time.getDay() + 1 // time.getDay() 0是星期天, 1是星期一 ...
+
+            const lastMonthfirst = time.getDate() - (lastMonthLength - 1)
+
+            console.log('lastMonthLength: %o\nlastMonthfirst: %o', lastMonthLength, lastMonthfirst)
+            for (let i = 0; i < lastMonthLength; i++) {
+                arr.push({ year, month: month - 1, day: lastMonthfirst + i })
+            }
+
+            time.setMonth(time.getMonth() + 2, 0) // 切换到这个月最后一天
+            const curMonthLength = time.getDate()
+            for (let i = 0; i < curMonthLength; i++) {
+                arr.push({ year, month, day: 1 + i })
+            }
+
+            time.setMonth(time.getMonth() + 1, 1) // 切换到下个月第一天
+            const nextMonthLength = 42 - (lastMonthLength + curMonthLength)
+            for (let i = 0; i < nextMonthLength; i++) {
+                arr.push({ year, month: month + 1, day: 1 + i })
+            }
+
+            return arr
+        }
+        console.log(JSON.stringify(getDates(2019, 2), null, '\t'))
+    </script>
+</body>
+
+</html>

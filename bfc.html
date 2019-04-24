@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BFC</title>
+    <style>
+    .box1 {
+        height: 20px;
+        background-color:blue;
+        margin-bottom: 100px;
+    }
+    .box2 {
+        height: 20px;
+        background-color:red;
+        margin-top: -90px;
+    }
+
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .box {
+        width:300px;
+        border: 1px solid #000;
+    }
+    .img {
+        float: left;
+        height: 40px;
+        width: 40px;
+        background-color: red;
+        margin-right: 10px;
+    }
+    .info {
+        overflow: hidden;
+        background: #f1f1f1;
+        color: #222;
+    }
+
+    .left {
+        float: left;
+        height: 200px;
+        width: 200px;
+        background-color: red;
+        margin-left: -100%;
+    }
+    .right {
+        float: right;
+        height: 200px;
+        width: 200px;
+        margin-left: -200px;
+        background-color: blue;
+    }
+    .main {
+        float: left;
+        height: 200px;
+        width: 100%;
+        background-color: yellow;
+    }
+    </style>
+</head>
+<body>
+    <div class="box1"></div>
+    <div class="box2"></div>
+
+    <div class="box">
+        <img src="03.jpg" alt="" class="img">
+        <p class="info">信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息信息</p>
+    </div>
+
+    <div class="container">
+        <div class="main"></div>
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+</body>
+</html>

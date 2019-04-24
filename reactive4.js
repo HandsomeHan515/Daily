@@ -19,16 +19,16 @@ class Dep {
 
 Object.keys(data).forEach(key => {
     let internalValue = data[key]
-    const dep = new Dep()
+    const dep = new Dep() // Each property gets a dependency instance
 
     Object.defineProperty(data, key, {
         get () {
-            dep.depend()
+            dep.depend() // Remember the target we'er running
             return internalValue
         },
         set (newVal) {
             internalValue = newVal
-            dep.notify()
+            dep.notify() // Re-run stored functions
         }
     })
 })
@@ -43,10 +43,12 @@ watcher(() => {
     data.total = data.price * data.quantity
 })
 
-console.log(data.price)
+console.log(data.price) // 5
+console.log(data.quantity) // 3
+console.log(data.total) // 10
 
 data.price = 20
-console.log(data.total)
+console.log(data.total) // 40
 
 data.quantity = 3
-console.log(data.total)
+console.log(data.total) // 60

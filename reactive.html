@@ -6,38 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 </head>
 
 <body>
+    <div id="app">{{total}}</div>
     <script>
-        let data = {
-            firstName: 'Jon',
-            lastName: 'Snow',
-            age: 25
-        }
-        function makeReactive(obj, key) {
-            let val = obj[key]
-
-            Object.defineProperty(obj, key, {
-                get() {
-                    return val
-                },
-                set(newVal) {
-                    val = newVal
-                    // notify(key)
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                price: 2,
+                quantity: 10
+            },
+            computed: {
+                total() {
+                    return this.price * this.quantity
                 }
-            })
-        }
+            }
+        })
 
-        function observeData(obj) {
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    makeReactive(obj, key)
+        console.log(vm)
+
+
+
+        let target = null
+        let data = { price: 5, quantity: 2 }
+
+        class Dep {
+            constructor() {
+                this.subscribers = []
+            }
+
+            depend() {
+                if (target && !this.subscribers.includes(target)) {
+                    this.subscribers.push(target)
                 }
+            }
+
+            notify() {
+                this.subscribers.forEach(sub => sub())
             }
         }
 
-        observeData(data)
+        Object.keys(data).forEach(key => {
+            let internalValue = data[key]
+            const dep = new Dep() // Each property gets a dependency instance
+
+            Object.defineProperty(data, key, {
+                get() {
+                    dep.depend() // Remember the target we'er running
+                    return internalValue
+                },
+                set(newVal) {
+                    internalValue = newVal
+                    dep.notify() // Re-run stored functions
+                }
+            })
+        })
+
+        function watcher(myFunc) {
+            target = myFunc
+            target()
+            target = null
+        }
+
+        watcher(() => {
+            data.total = data.price * data.quantity
+        })
+
+        console.log(data.price) // 5
+        console.log(data.quantity) // 3
+        console.log(data.total) // 10
+
+        data.price = 20
+        console.log(data.total) // 40
+
+        data.quantity = 3
+        console.log(data.total) // 60
+
     </script>
 </body>
 
