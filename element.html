@@ -1,0 +1,222 @@
+<style>
+    .item {
+        font-size: 20px;
+        color: red;
+    }
+
+    .active {
+        color: yellow;
+
+    }
+
+    .list-group {
+        list-style: none;
+    }
+</style>
+<div id="root"></div>
+<script>
+    // Element
+    class Element {
+        constructor(type, props, children) {
+            this.type = type
+            this.props = props
+            this.children = children
+        }
+    }
+
+    function createElement(type, props, children) {
+        return new Element(type, props, children)
+    }
+
+    function render(domObj) {
+        let el = document.createElement(domObj.type)
+
+        for (let key in domObj.props) {
+            setAttr(el, key, domObj.props[key])
+        }
+
+        domObj.children.forEach(child => {
+            child = (child instanceof Element) ? render(child) : document.createTextNode(child)
+            el.appendChild(child)
+        })
+
+        return el
+    }
+
+    function setAttr(node, key, value) {
+        switch (key) {
+            case 'value':
+                if (node.tagName.toLowerCase() === 'input' || node.tagName.toLowerCase() === 'textarea') {
+                    node.value = value
+                } else {
+                    node.setAttribute(key, value)
+                }
+                break
+            case 'style':
+                node.style.cssText = value
+                break
+            default:
+                node.setAttribute(key, value)
+        }
+    }
+
+    function renderDom(el, target) {
+        target.appendChild(el)
+    }
+
+    let virtualDom = createElement('ul', { class: 'list' }, [
+        createElement('li', { class: 'item', style: "color: blue; text-align: right;" }, ['周']),
+        createElement('li', { class: 'item' }, ['林俊杰']),
+        createElement('li', { class: 'item' }, ['王力宏'])
+    ]);
+
+    let virtualDom2 = createElement('ul', { class: 'list-group' }, [
+        createElement('li', { class: 'item active' }, ['七里香']),
+        createElement('li', { class: 'active' }, ['一千年以后']),
+        createElement('li', { class: 'item active' }, [
+            createElement('span', { class: 'item' }, ['😄'])
+        ])
+    ]);
+
+
+    console.log(virtualDom);
+
+
+    // +++
+
+    let el = render(virtualDom); // 渲染虚拟DOM得到真实的DOM结构
+
+    console.log('el: %o\n node: %o\n', el, el.childNodes);
+
+    // 直接将DOM添加到页面内
+
+    renderDom(el, document.getElementById('root'));
+
+
+    // diff
+    const patches = {}
+    let num = 0 // 先序深度优先遍历的序号
+
+    function diff(oldTree, newTree) {
+        walk(oldTree, newTree, num)
+        return patches
+    }
+
+    function walk(oldNode, newNode, index) {
+        // 每个元素都有一个补丁
+        let current = []
+        if (!newNode) {
+            current.push({ type: 'REMOVE', index })
+        } else if (isString(oldNode) && isString(newNode)) {
+            if (oldNode !== newNode) {
+                current.push({ type: 'TEXT', text: newNode })
+            }
+        } else if (oldNode.type === newNode.type) {
+            // 属性更改
+            let attr = diffAttr(oldNode.props, newNode.props)
+            if (Object.keys(attr).length > 0) {
+                current.push({ type: 'ATTR', attr })
+            }
+            // 子节点
+            diffChildren(oldNode.children, newNode.children)
+        } else {
+            // 节点替换
+            current.push({ type: 'REPLACE', newNode })
+        }
+        // 当前元素存在补丁
+        if (current.length) {
+            patches[index] = current
+        }
+    }
+
+    function isString(obj) {
+        return typeof obj === 'string'
+    }
+
+    function diffAttr(oldAttrs, newAttrs) {
+        let patch = {}
+        // 修改的老属性
+        for (let key in oldAttrs) {
+            if (oldAttrs[key] !== newAttrs[key]) {
+                patch[key] = newAttrs[key]
+            }
+        }
+        // 新增的属性节点
+        for (let key in newAttrs) {
+            if (!oldAttrs.hasOwnProperty(key)) {
+                patch[key] = newAttrs[key]
+            }
+        }
+        return patch
+    }
+
+    function diffChildren(oldChildren, newChildren) {
+        oldChildren.forEach((child, index) => {
+            walk(child, newChildren[index], ++num)
+        })
+    }
+
+    // patch
+    let allPatches
+    let index = 0
+    function patch(node, patches) {
+        allPatches = patches
+        dfs(node, patches)
+    }
+
+    function dfs(node) {
+        let current = allPatches[index++]
+        let childNodes = node.childNodes
+        console.log('childnodes', childNodes)
+
+        childNodes.forEach(child => dfs(child))
+
+        if (current) {
+            doPatch(node, current)
+        }
+    }
+
+    function doPatch(node, patches) {
+        patches.forEach(patch => {
+            switch (patch.type) {
+                case 'TEXT':
+                    node.textContent = patch.text
+                    break
+                case 'REMOVE':
+                    node.parentNode.removeChild(node)
+                    break
+                case 'ATTR':
+                    for (let key in patch.attr) {
+                        const value = patch.attr[key]
+                        if (value) {
+                            setAttr(node, key, value)
+                        } else {
+                            node.removeAttribute(key)
+                        }
+                    }
+                    break
+                case 'REPLACE':
+                    let newNode = patch.newNode
+                    newNode = (newNode instanceof Element) ? render(newNode) : document.createTextNode(newNode)
+                    node.parentNode.replaceChild(newNode, node)
+                    break
+                default:
+                    break
+            }
+        })
+    }
+
+
+
+    // diff一下两个不同的虚拟DOM
+
+    let diffPatches = diff(virtualDom, virtualDom2);
+
+    console.log(diffPatches);
+
+    // 将变化打补丁，更新到el
+
+    setTimeout(() => {
+        patch(el, patches);
+    }, 2000)
+</script>

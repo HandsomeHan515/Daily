@@ -1,0 +1,102 @@
+<script>
+    const PENDING = 'pending'
+    const RESOLVED = 'resolved'
+    const REJECTED = 'rejected'
+
+    function promise(fn) {
+        const self = this
+        self.status = PENDING
+        self.value = undefined
+        self.reason = undefined
+        self.resolvedCallbacks = []
+        self.rejectedCallbacks = []
+
+        function resolve(value) {
+            if (value instanceof promise) {
+                return value.then(resolve, reject)
+            }
+            setTimeout(() => {
+                if (self.status === PENDING) {
+                    self.status = RESOLVED
+                    self.value = value
+                    self.resolvedCallbacks.map(cb => cb(self.value))
+                }
+            }, 0);
+        }
+
+        function reject(reason) {
+            setTimeout(() => {
+                if (self.status === PENDING) {
+                    self.status = REJECTED
+                    self.reason = reason
+                    self.rejectedCallbacks.map(cb => cb(self.reason))
+                }
+            }, 0);
+        }
+
+        try {
+            fn(resolve, reject)
+        } catch (e) {
+            reject(e)
+        }
+    }
+
+    function resolutionProcedure(promise2, x, resolve, reject) {
+        if (promise2 === x) {
+            return reject(new TypeError('Error'))
+        }
+    }
+
+    promise.prototype.then = function (onFulfilled, onRejected) {
+        const self = this
+        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+        onRejected = typeof onRejected === 'function' ? onRejected : r => { throw r }
+
+        if (self.status === PENDING) {
+            const promise2 = new promise((resolve, reject) => {
+                self.resolvedCallbacks.push(() => {
+                    try {
+                        const x = onFulfilled(self.value)
+                        resolutionProcedure(promise2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
+
+                self.rejectedCallbacks.push(() => {
+                    try {
+                        const x = onRejected(self.reason)
+                        resolutionProcedure(promise2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
+            })
+            return promise2
+        }
+        if (self.status === RESOLVED) {
+            const promise2 = new promise((resolve, reject) => {
+                setTimeout(() => {
+                    try {
+                        const x = onFulfilled(self.value)
+                        resolutionProcedure(promise2, x, resolve, reject)
+                    } catch (reason) {
+                        reject(reason)
+                    }
+                }, 0);
+            })
+            return promise2
+        }
+        if (self.status === REJECTED) {
+            onRejected(self.reason)
+        }
+    }
+
+    new promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(1)
+        }, 3000)
+    }).then(value => {
+        console.log(value)
+    })
+</script>
