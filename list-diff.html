@@ -1,0 +1,129 @@
+<script>
+    function getItemKey(item, key) {
+        if (!item || !key) return
+        return typeof key === 'string' ? item[key] : key(item)
+    }
+
+    function makeKeyIndexAndFree(list, key) {
+        let keyIndex = {}
+        let free = []
+        for (let i = 0; i < list.length; i++) {
+            const item = list[i]
+            const itemKey = getItemKey(item, key)
+
+            if (itemKey) {
+                keyIndex[itemKey] = i
+            } else {
+                free.push(item)
+            }
+        }
+        return { keyIndex, free }
+    }
+
+    function diff(oldList, newList, key) {
+        const oldMap = makeKeyIndexAndFree(oldList, key)
+        const newMap = makeKeyIndexAndFree(newList, key)
+
+        const newFree = newMap.free
+
+        const oldKeyIndex = oldMap.keyIndex
+        const newKeyIndex = newMap.keyIndex
+
+        let moves = [], children = [], i = 0, item, itemKey, freeIndex = 0
+
+        // oldList [key1, 无key, key2, key3]
+        // newList [key3, key1, 无key, key4]
+        while (i < oldList.length) {
+            item = oldList[i]
+            itemkey = getItemKey(item, key)
+
+            if (itemkey) {
+                if (!newKeyIndex.hasOwnProperty(itemkey)) {
+                    // oldList 在 newList 中找不到的元素设置为 null
+                    children.push(null)
+                } else {
+                    // itemKey 为 oldList 的 key 值，该操作找出 oldList 在 newList 存在的元素
+                    const newItemIndex = newKeyIndex[itemkey]
+                    children.push(newList[newItemIndex])
+                }
+            } else {
+                const freeItem = newFree[freeIndex++] || null
+                children.push(freeItem)
+            }
+            i++
+        }
+        // simulateList [key1, 无key, null, key3]
+        let simulateList = children.slice(0)
+
+        i = 0
+        while (i < simulateList.length) {
+            if (simulateList[i] === null) {
+                // 该 i 即为 oldList 中需要移处元素的下标
+                remove(i)
+                removeSimulate(i)
+            } else {
+                i++
+            }
+        }
+
+        let j = i = 0
+        while (i < newList.length) {
+            item = newList[i]
+            itemKey = getItemKey(item, key)
+
+            const simulateItem = simulateList[j]
+            const simulateItemKey = getItemKey(simulateItem, key)
+            if (simulateItem) {
+                if (itemkey === simulateItemKey) {
+                    j++
+                } else {
+                    // 添加新元素
+                    if (!oldKeyIndex.hasOwnProperty(itemkey)) {
+                        insert(i, item)
+                    } else {
+                        const nextItemKey = getItemKey(simulateList[j + 1], key)
+                        if (nextItemKey === itemkey) {
+                            remove(i)
+                            removeSimulate(j)
+                            j++
+                        } else {
+                            insert(i, item)
+                        }
+                    }
+                }
+            } else {
+                // 如果是新的 item, 直接执行 inesrt
+                insert(i, item)
+            }
+            i++
+        }
+
+        let k = simulateList.length - j
+        while (j++ < simulateList.length) {
+            k--
+            remove(k + i)
+        }
+
+        function remove(index) {
+            const move = { index, type: 0 }
+            moves.push(move)
+        }
+
+        function insert(index, item) {
+            const move = { index, item, type: 1 }
+            moves.push(move)
+        }
+
+        function removeSimulate(index) {
+            simulateList.splice(index, 1)
+        }
+
+        return { moves, children }
+    }
+
+    const oldList = [{ id: "a" }, { id: "b" }, { id: "c" }, { id: "d" }, { id: "e" }]
+    const newList = [{ id: "c" }, { id: "a" }, { id: "b" }, { id: "e" }, { id: "f" }]
+
+    const moves = diff(oldList, newList, "id")
+    console.log('moves: %o', moves)
+</script>

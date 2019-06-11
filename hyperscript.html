@@ -1,0 +1,110 @@
+<script>
+    function isNode(el) {
+        return el && el.nodeName && el.nodeType
+    }
+
+    function forEach(arr, fn) {
+        if (arr.forEach) return arr.forEach(fn)
+        for (var i = 0, len = arr.length; i < len; i++) {
+            fn(arr[i], i)
+        }
+    }
+
+    function isArray(arr) {
+        return Object.prototype.toString.call(arr) === '[object Array]'
+    }
+
+    var document = window.document
+    var Text = window.Text
+
+    function context() {
+        var cleanupFuncs = []
+
+        function h() {
+            var args = [].slice.call(arguments), e = null
+            function item(l) {
+                var r
+                function parseClass(string) {
+                    var m = split(string, /([\.#]?[^\s#.]+)/)
+                    if (/^\.|#/.test(m[1])) {
+                        e = document.createElement('div')
+
+                        forEach(m, function (v) {
+                            var s = v.substring(1, v.length)
+                            if (!v) return
+                            if (!e) {
+                                e = document.createElement(v)
+                            } else if (v[0] === '.') {
+                                e.classList.add(s)
+                            } else if (v[0] === '#') {
+                                e.setAttribute('id', s)
+                            }
+                        })
+                    }
+                }
+
+                if (l === null) {
+
+                } else if (typeof l === 'string') {
+                    if (!e) {
+                        parseClass(l)
+                    } else {
+                        e.appendChild(r = document.createTextNode(l))
+                    }
+                } else if (typeof l === 'number' || typeof l === 'boolean' || l instanceof Date || l instanceof RegExp) {
+                    e.appendChild(r = document.createTextNode(l.toString()))
+                } else if (isArray(l)) {
+                    forEach(l, item)
+                } else if (isNode(l)) {
+                    e.appendChild(r = l)
+                } else if (l instanceof Text) {
+                    e.appendChild(r = l)
+                } else if (typeof l === 'object') {
+                    for (var k in l) {
+                        if (typeof l[k] === 'function') {
+                            if (/^on\w+/.test(k)) {
+                                (function(k, l) {
+                                    if (e.addEventListener) {
+                                        e.addEventListener(k.substring(2), l[k], false)
+                                    }
+                                })(k, l)
+                            }
+                        } else if (k === 'style') {
+                            if (typeof l[k] === 'string') {
+                                e.style.cssText = l[k]
+                            } else {
+                                for (var s in l[k]) {
+                                    (function (s, v) {
+                                        if (typeof v === 'function') {
+                                            e.style.setProperty(s, v())
+                                            cleanupFuncs.push(v(function (val) {
+                                                e.style.setProperty(s, val)
+                                            }))
+                                        } else {
+                                            var match = l[k][s].match(/(.*)\W+!important\W*$/)
+                                            if (match) {
+                                                e.style.setProperty(s, match[1], 'important')
+                                            } else {
+                                                e.style.setProperty(s, l[k][s])
+                                            }
+                                        }
+                                    })(s, l[k][s])
+                                }
+                            }
+                        } else if (k === 'attrs') {
+                            for (var v in l[k]) {
+                                e.setAttribute(v, l[k][v])
+                            }
+                        } else if (k.substr(0, 5) === 'data-') {
+                            e.setAttribute(k, l[k])
+                        } else {
+                            e[k] = l[k]
+                        }
+                    }
+                } else if (typeof l === 'function') {
+
+                }
+            }
+        }
+    }
+</script>

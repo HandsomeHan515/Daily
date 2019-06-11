@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/reactive1.js"
+            "program": "${workspaceFolder}/reactive3.js"
         }
     ]
 }

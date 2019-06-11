@@ -1,23 +1,23 @@
 class Dep {
-    constructor () {
+    constructor() {
         this.subscribers = []
     }
 
-    depend () {
+    depend() {
         if (target && !this.subscribers.includes(target)) {
             this.subscribers.push(target)
         }
     }
 
-    notify () {
+    notify() {
         this.subscribers.forEach(sub => sub())
     }
 }
 
-function watcher (myFunc) {
+function watcher(myFunc) {
     target = myFunc
     dep.depend()
-    target()
+    // target()
     target = null
 }
 
@@ -26,9 +26,9 @@ const dep = new Dep()
 let price = 5
 let quantity = 2
 let total = 0
-let target = () => { total = price * quantity } 
-watcher(target)
-
+let target = null
+watcher(() => { total = price * quantity })
+console.log('target', target)
 price = 20
 console.log(total)
 dep.notify()

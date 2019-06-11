@@ -2,17 +2,17 @@ let target = null
 let data = { price: 5, quantity: 2 }
 
 class Dep {
-    constructor () {
+    constructor() {
         this.subscribers = []
     }
 
-    depend () {
+    depend() {
         if (target && !this.subscribers.includes(target)) {
             this.subscribers.push(target)
         }
     }
 
-    notify () {
+    notify() {
         this.subscribers.forEach(sub => sub())
     }
 }
@@ -22,18 +22,18 @@ Object.keys(data).forEach(key => {
     const dep = new Dep() // Each property gets a dependency instance
 
     Object.defineProperty(data, key, {
-        get () {
+        get() {
             dep.depend() // Remember the target we'er running
             return internalValue
         },
-        set (newVal) {
+        set(newVal) {
             internalValue = newVal
             dep.notify() // Re-run stored functions
         }
     })
 })
 
-function watcher (myFunc) {
+function watcher(myFunc) {
     target = myFunc
     target()
     target = null
@@ -52,3 +52,4 @@ console.log(data.total) // 40
 
 data.quantity = 3
 console.log(data.total) // 60
+
