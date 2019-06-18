@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box">
+        <!-- 测试 -->
+        <p id='first'>1</p>
+        <p>第二步</p>
+        <p>第三步</p>
+        <p>第四步</p>
+        <p>第五步</p>
+        <input id="input" type="text" value="hanshuai">
+    </div>
+    <script>
+        var box = document.getElementById('box')
+        var first = document.getElementById('first')
+        var input = document.getElementById('input')
+
+        console.log('box', box.__proto__)
+        console.log('baseURI', box.baseURI)
+        console.log('childNodes', box.hasChildNodes(), box.childNodes, first.hasChildNodes(), first.childNodes)
+        console.log('firstChild', box.firstChild, first.firstChild)
+        console.log('lastChild', box.lastChild, first.lastChild)
+        console.log('isConnected', box.isConnected)
+        console.log('nextSibling', box.nextSibling, first.nextSibling)
+        console.log('previousSibling', box.previousSibling, first.previousSibling)
+        console.log('nodeName', box.nodeName, first.nodeName)
+        console.log('nodeType', box.nodeType, first.nodeType) // 8 COMMENT_NODE nodeName #comment
+        console.log('nodeValue', box.nodeValue, first.nodeValue, input.nodeValue) // 8 COMMENT_NODE nodeName #comment
+        console.log('parentNode', box.parentNode, first.parentNode)
+        console.log('parentElement', box.parentElement, first.parentElement)
+        console.log('textContent', box.textContent, first.textContent, 'han:', input.value)
+    </script>
+</body>
+
+</html>

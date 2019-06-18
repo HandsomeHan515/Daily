@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            height: 300px;
+            width: calc(100% / 2 - 10px);
+            background-color: #ccc;
+            float: left;
+            margin-bottom: 10px;
+        }
+
+        body div:nth-child(2n) {
+            margin-left: 10px;
+        }
+
+        div:nth-of-type(2n) {
+            background-color: #666;
+        }
+
+        .first::first-letter {
+            font-size: 100px;
+            padding-left: 60px;
+        }
+
+        .first::first-line {
+            font-size: 50px;
+        }
+
+        .first::selection {
+            color: red;
+            background-color: #334455;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="first">你好，hello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world!
+        KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello
+        world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world!
+        KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello
+        world! KDhello world! KDhello world! KDhello world! KDhello world! KDhello world! KD</div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div> -->
+
+    <input type="text">
+</body>
+
+</html>
