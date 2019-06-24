@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="./san.dev.js"></script>
+    <script>
+        var Son = san.defineComponent({
+            name: "son",
+            template: "<div>{{son}}</div>",
+            initData: function () {
+                return {
+                    son: 'son'
+                }
+            }
+        })
+
+        var App = san.defineComponent({
+            template: "<div><b-son></b-son>{{name}}</div>",
+            initData: function () {
+                return {
+                    name: "test"
+                }
+            },
+            components: {
+                'b-son': Son
+            },
+            attached: function () {
+                this.data.set("name", "test test")
+                var child = this.children[0]
+                child.data.set('son', 'son son')
+            }
+        })
+        new App().attach(document.body)
+    </script>
+</body>
+
+</html>
