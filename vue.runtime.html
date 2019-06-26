@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue runtime</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script src="https://vuejs.org/js/vue.js"></script>
+    <script>
+        let Com = Vue.component('Com', {
+            render(h) {
+                console.log('this', this)
+                return h(
+                    'h' + this.level,   // 标签名称
+                )
+            },
+            props: {
+                level: {
+                    type: Number,
+                    required: true
+                }
+            }
+        })
+
+        new Vue({
+            el: '#app',
+            data: {
+                title: 'han',
+                name: 'LL'
+            },
+            render(h) {
+                return h('div', {
+                    class: {
+                        classes: true
+                    },
+                }, [
+                        h(Com, {
+                            props: {
+                                level: 1
+                            },
+                        }),
+                        h('span', this.name)
+                    ])
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -39,3 +39,8 @@ list-diff2@^0.1.4:
   version "0.1.4"
   resolved "http://registry.npm.taobao.org/list-diff2/download/list-diff2-0.1.4.tgz#8539c05c579b424b1349a34be78508d3920df958"
   integrity sha1-hTnAXFebQksTSaNL54UI05IN+Vg=
+
+vue@^2.6.10:
+  version "2.6.10"
+  resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
+  integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
