@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>By Class</title>
+</head>
+
+<body>
+    <div class="box">1</div>
+    <div class="box">2</div>
+    <div class="box">3</div>
+    <div class="box">4</div>
+    <div class="box">5</div>
+    <div class="box">6</div>
+    <div id="wrapper" style="height: 300px;">
+        <div class="box">123</div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div>
+    <script src="./console-ie8.js"></script>
+    <script src="./byClassName.js"></script>
+    <script src="./getComputedStyle.js"></script>
+    <script src="./getOffsetValue.js"></script>
+
+    <script>
+        // console.log('class ', Object.prototype.toString.call(byClassName('box'))) // IE 8 [object Array] others [object HTMLCollection]
+        // var boxs = document.getElementsByClassName('box')
+        // console.log('boxs ', Object.prototype.toString.call(boxs)) // IE 8 [object Array] others [object HTMLCollection]
+
+        // console.log(byClassName('box', 'wrapper'))
+
+        var style = getComputedStyle(document.getElementById('wrapper'), null)
+        console.log(style, style.getPropertyValue('height'))
+
+        console.log(getOffsetValue(document.getElementById('wrapper')))
+    </script>
+</body>
+
+</html>
