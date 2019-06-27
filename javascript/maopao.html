@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #box {
+            height: 250px;
+            width: 250px;
+            background-color: #ccc;
+            padding: 50px 0 0 50px;
+        }
+
+        #inner {
+            height: 200px;
+            width: 200px;
+            background-color: blue;
+            text-align: center;
+        }
+
+        #one {
+            height: 50px;
+            width: 50px;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <div id="inner">
+            <div id="one"></div>
+        </div>
+    </div>
+
+    <a href="https://www.baidu.com" id="href">点我去百度</a>
+
+    <script src="./stopBubblue.js"></script>
+    <script src="./stopDefault.js"></script>
+    <script>
+        var one = document.getElementById('one')
+        var inner = document.getElementById('inner')
+        var box = document.getElementById('box')
+        var href = document.getElementById('href')
+
+        one.onclick = function (event) {
+            stopBubble(event)
+            alert('one')
+        }
+
+        inner.onclick = function (event) {
+            stopBubble(event)
+            alert('inner')
+        }
+
+        box.onclick = function () {
+            alert('box')
+        }
+
+        href.onclick = function (e) {
+            stopDefault(e)
+        }
+    </script>
+</body>
+
+</html>
