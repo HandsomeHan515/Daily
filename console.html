@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Console</title>
+</head>
+
+<body>
+    <div id="box">console</div>
+    <script>
+        var box = document.getElementById('box')
+        console.log('box', box)
+
+        console.dir(box)
+
+        console.warn('box', box)
+
+
+        const transactions = [{
+            id: "7cb1-e041b126-f3b8",
+            seller: "WAL0412",
+            buyer: "WAL3023",
+            price: 203450,
+            time: 1539688433
+        }]
+        console.table(transactions, ['seller', 'price'])
+    </script>
+</body>
+
+</html>
