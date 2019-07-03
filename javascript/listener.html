@@ -9,12 +9,13 @@
 </head>
 
 <body>
-    <div id="app"></div>
+    <div>123323</div>
     <script>
-        var app = document.getElementById('app')
-        var comment = document.createComment('div')
-        comment.textContent = 'I am comment!'
-        app.appendChild(comment)
+        ['contextmenu', 'selectstart', 'copy'].forEach(function (ev) {
+            document.addEventListener(ev, function (event) {
+                return event.returnValue = false
+            })
+        });
     </script>
 </body>
 

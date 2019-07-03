@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="box">test</div>
+
+    <script>
+        var flag = 0;
+        var list = [
+            {
+                id: 1, name: 'han', answers: [
+                    { id: 1, name: '哈哈哈哈' },
+                    { id: 2, name: '嘿嘿' },
+                    { id: 3, name: '啦啦啦' },
+                ]
+            },
+            {
+                id: 2, name: 'zhang', answers: [
+                    { id: 4, name: '666' },
+                    { id: 5, name: '777' },
+                    { id: 6, name: '888' },
+                    { id: 7, name: '999' },
+                ]
+            },
+            {
+                id: 3, name: 'liu', answers: [
+                    { id: 8, name: '66336' },
+                    { id: 9, name: '773347' },
+                    { id: 10, name: '84488' },
+                    { id: 11, name: '99329' },
+                ]
+            }
+        ];
+
+        function answer(list, i) {
+            var radios = document.getElementsByTagName('input')
+            let selected = null
+            for (var j = 0; j < radios.length; j++) {
+                if (radios[j].checked) {
+                    selected = radios[j]
+                    break
+                }
+            }
+
+            if (!selected) {
+                alert('请选择！！！')
+                return
+            } else {
+                // 请求提交数据 selected
+                // ajax({
+                //     success: function () {
+                //         if (i < list.length - 1) {
+                //             flag = ++i;
+                //             display(list, flag)
+                //         }
+                //     }
+                // })
+            }
+
+            if (i < list.length - 1) {
+                flag = ++i;
+                display(list, flag)
+            }
+        }
+
+        function display(list, i) {
+            var answers = list[i].answers;
+            var str = '<div>' + list[i].name + '</div><div>';
+            for (var j = 0; j < answers.length; j++) {
+                var index = j + 1;
+                str += '<label for="radio' + j + '">' + answers[j].name + '</label><input type="radio" name="select" id="radio' + j + '"> ';
+            }
+            str += '</div><button class="item">提交</button>'
+            var box = document.getElementById('box');
+            box.innerHTML = str;
+
+            (function () {
+                var items = document.getElementsByClassName('item')
+                var item = items[items.length - 1]
+
+                item.addEventListener('click', function () {
+                    answer(list, i)
+                }, false)
+            })();
+        }
+
+        display(list, 0)
+    </script>
+</body>
+
+</html>
