@@ -1,0 +1,67 @@
+<script>
+    // apply 或者 call 方式
+    function Animal(name, color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    function Dog(name, color) {
+        Animal.apply(this, arguments);
+        this.species = '哺乳类';
+    }
+
+    var dog = new Dog('wu', 'white')
+    console.log('dog', dog)
+
+
+    // prototype 方式
+    function Product() {
+        this.category = 'product';
+    }
+
+    function Food(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    Food.prototype = new Product();
+    Food.prototype.constructor = Food;
+
+    var food = new Food('cheese', 4)
+    console.log('food', food)
+
+    class Person {
+        constructor(name) {
+            this.name = name
+        }
+
+        say() {
+            console.log('I am ' + this.name)
+        }
+    }
+
+    const person = new Person('han')
+    console.log('person', person)
+    person.say()
+
+    class Student extends Person {
+        constructor(name, age) {
+            super(name)
+            this.age = age
+        }
+
+        tell() {
+            console.log('I am ' + this.name + ', I am ' + this.age + ' year old!')
+        }
+    }
+
+    const student = new Student('zhang', 20)
+    console.log('student', student,
+        student instanceof Student,  // true
+        student instanceof Person,   // true
+        student instanceof Object,   // true
+        student instanceof Function  // false
+    )
+    student.say()
+    student.tell()
+</script>

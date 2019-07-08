@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Call Test</title>
+</head>
+
+<body>
+    <script>
+        function Product(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+
+        function Food(name, price) {
+            Product.call(this, name, price)
+            this.category = 'food'
+        }
+
+        console.log(new Food('cheese', 5), new Product('cheese', 6))
+
+        var sData = 'Wisen';
+
+        function display() {
+            console.log('sData value is %s ', this.sData);
+        }
+
+        display.call(); // 非严格模式下，this 指向全局对象
+    </script>
+</body>
+
+</html>
