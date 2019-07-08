@@ -4,11 +4,11 @@ let total = 0
 let target = null
 let storage = []
 
-function record() {
+function record () {
     storage.push(target)
 }
 
-function replay() {
+function replay () {
     storage.forEach(run => run())
 }
 

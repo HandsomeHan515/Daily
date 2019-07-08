@@ -8,13 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/next-tick/closure-example.js"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/next-tick/next-tick.js"
+            "program": "${workspaceFolder}/vue/reactive.js"
         }
     ]
 }
