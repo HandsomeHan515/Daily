@@ -514,10 +514,12 @@
         }
         var segments = path.split('.');
         return function (obj) {
+            console.log('obj', obj, segments)
             for (var i = 0; i < segments.length; i++) {
                 if (!obj) { return }
                 obj = obj[segments[i]];
             }
+            console.log('obbb', obj)
             return obj
         }
     }
@@ -746,6 +748,7 @@
             // order
             subs.sort(function (a, b) { return a.id - b.id; });
         }
+        console.log('subs', subs)
         for (var i = 0, l = subs.length; i < l; i++) {
             subs[i].update();
         }
@@ -1043,6 +1046,7 @@
             configurable: true,
             get: function reactiveGetter () {
                 var value = getter ? getter.call(obj) : val;
+                console.log('value', value)
                 if (Dep.target) {
                     dep.depend();
                     if (childOb) {
@@ -1072,6 +1076,7 @@
                     val = newVal;
                 }
                 childOb = !shallow && observe(newVal);
+                console.log('notify', Dep.target)
                 dep.notify();
             }
         });

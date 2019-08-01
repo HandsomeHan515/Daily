@@ -22,9 +22,10 @@ function defineReactive (data, key, val) {
         }
     })
 }
-
+let uid = 0
 class Dep {
     constructor() {
+        this.id = uid++
         this.subs = []
     }
 
@@ -38,7 +39,7 @@ class Dep {
 
     depend () {
         if (Dep.target) {
-            this.addSub(Dep.target)
+            Dep.target.addDep(this)
         }
     }
 
@@ -61,9 +62,20 @@ function remove (arr, item) {
 }
 
 class Watcher {
-    constructor(vm, expOrFn, cb) {
+    constructor(vm, expOrFn, cb, options) {
         this.vm = vm
-        this.getter = parsePath(expOrFn)
+        if (options) {
+            this.deep = !!options.deep
+        } else {
+            this.deep = false
+        }
+        this.deps = []
+        this.depIds = new Set()
+        if (typeof expOrFn === 'function') {
+            this.getter = expOrFn
+        } else {
+            this.getter = parsePath(expOrFn)
+        }
         this.cb = cb
         this.value = this.get()
     }
@@ -71,6 +83,9 @@ class Watcher {
     get () {
         Dep.target = this
         let value = this.getter.call(this.vm, this.vm)
+        if (this.deep) {
+            traverse(value)
+        }
         Dep.target = undefined
         return value
     }
@@ -79,6 +94,51 @@ class Watcher {
         const oldValue = this.value
         this.value = this.get()
         this.cb.call(this.vm, this.value, oldValue)
+    }
+
+    addDep (dep) {
+        const id = dep.id
+        if (!this.depIds.has(id)) {
+            this.depIds.add(id)
+            this.deps.push(dep)
+            dep.addSub(this)
+        }
+    }
+
+    teardown () {
+        let i = this.deps.length
+        while (i--) {
+            this.deps[i].removeSub(this)
+        }
+    }
+}
+
+const seenObjects = new Set()
+function traverse (val) {
+
+}
+
+function _traverse (val, seen) {
+    let i, keys
+    const isA = Array.isArray(val)
+    if (!isA && !isObject(val) || Object.isFrozen(val)) {
+        return
+    }
+
+    if (val.__ob__) {
+        const depId = val.__ob__.dep.id
+        if (seen.has(depId)) {
+            return
+        }
+        seen.add(depId)
+    }
+    if (isA) {
+        i = val.length
+        while (i--) _traverse(val[i], seen)
+    } else {
+        keys = Object.keys(val)
+        i = keys.length
+        while (i--) _traverse(val[keys[i]], seen)
     }
 }
 
@@ -208,3 +268,16 @@ function def (obj, key, val, enumerable) {
     })
 }
 
+function Vue () { }
+
+Vue.prototype.$watch = function (expOrFn, cb, options) {
+    const vm = this
+    options = options || {}
+    const watcher = new Watcher(vm, expOrFn, cb, options)
+    if (options.immediate) {
+        cb.call(vm, watcher.value)
+    }
+    return function unwatchFn () {
+        return watcher.teardown()
+    }
+}

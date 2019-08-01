@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Scroll</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #wrapper {
+            height: 200px;
+            width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fff;
+            overflow-y: auto;
+        }
+
+        #box {
+            height: 1000px;
+            padding: 100px;
+            border: 50px solid #ccc;
+            background-color: #bbbbdf;
+            text-align: center;
+            line-height: 1000px;
+            font-size: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper" onscroll="handleScroll();">
+        <div id="box">scroll</div>
+    </div>
+
+    <script>
+        function throttle(fn, time) {
+            var timer = null
+            return function () {
+                var arg = arguments
+                var context = this
+                if (!timer) {
+                    timer = setTimeout(function () {
+                        fn.apply(this, arguments)
+                        timer = null
+                    }, time || 1500)
+                }
+            }
+        }
+        const wrapper = document.getElementById('wrapper');
+        console.dir(wrapper)
+
+        var handleScroll = throttle(function () {
+            console.log('scrollHeight', wrapper.scrollHeight)
+            console.log('clientHeight', wrapper.clientHeight)
+            console.log('scrollTop', wrapper.scrollTop)
+        })
+    </script>
+</body>
+
+</html>
