@@ -1,0 +1,20 @@
+<script>
+    var arr = [{ roleId: "1234", roleName: "zhang" }, { roleId: "2343", roleName: "赵" }]
+    var str = ''
+    arr.forEach(element => {
+        var s = ''
+        if (typeof element === 'object') {
+            for (const key in element) {
+                if (element.hasOwnProperty(key)) {
+                    const ele = element[key]
+                    s += `${key}:"${ele}",`
+                }
+            }
+            str += `{${s}}`
+        } else {
+            str += `{${s}}`
+        }
+
+    })
+    console.log('str', `[${str}]`)
+</script>

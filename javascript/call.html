@@ -29,6 +29,32 @@
         }
 
         display.call(); // 非严格模式下，this 指向全局对象
+
+
+        // 手动实现
+        Function.prototype.myCall = function (context, ...params) {
+            context = context || window
+            context.fn = this
+            console.log(this, context, context.fn)
+
+            const result = context.fn(...params)
+            console.log('result', result, ...params)
+            delete context.fn
+            return result
+        }
+
+        var obj = {
+            name: 'han',
+            say() {
+                console.log('this', this)
+                console.log(this.name, arguments)
+            }
+        }
+        var obj1 = {
+            name: 'hanss'
+        }
+
+        obj.say.myCall(obj1, 1, 2)
     </script>
 </body>
 
