@@ -23,7 +23,6 @@ let dog = {
     a: {
         name: 'a',
         say (age, sex) {
-            console.log(this)
             console.log('I am ' + this.name, age, sex)
         }
     }
@@ -31,4 +30,21 @@ let dog = {
 
 let name = 'nnnn'
 
-dog.a.say.bind(window, 18, '女')()
+// dog.a.say.myCall(person, 18, '女')
+
+
+Function.prototype.call2 = function (context, ...args) {
+    if (typeof this !== 'function') {
+        return new Error('This is not a function')
+    }
+
+    context = context || window;
+    context.fn = this;
+    console.log('args', ...args)
+    var result = context.fn(...args);
+    delete context.fn;
+    return result;
+}
+
+dog.a.say.call2(person, 18, '男')
+

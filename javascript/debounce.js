@@ -4,7 +4,8 @@ function debounce (cb) {
     return function () {
         if (timer) clearTimeout(timer)
         timer = setTimeout(() => {
-            cb.call(this, arguments)
+            cb.apply(this, arguments)
+            timer = null
         }, 1000);
     }
 }
@@ -20,15 +21,26 @@ function debounce (func, time, immediate) {
         var args = arguments
         if (immediate) {
             if (!timer) {
-                func.call(this, args)
+                func.apply(this, args)
             }
             timer = setTimeout(function () {
                 timer = null
             }, time)
         } else {
             timer = setTimeout(function () {
-                func.call(context, args)
+                func.apply(context, args)
             }, time)
         }
+    }
+}
+
+// 防抖
+function debounce (cb, wait) {
+    let timer = null
+    return function () {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+            cb.apply(this, arguments)
+        }, wait);
     }
 }
