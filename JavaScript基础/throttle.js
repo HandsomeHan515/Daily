@@ -1,5 +1,5 @@
 function throttl (cb, wait) {
-    let time = null
+    let timer = null
     return function () {
         if (!timer) {
             timer = setTimeout(() => {
