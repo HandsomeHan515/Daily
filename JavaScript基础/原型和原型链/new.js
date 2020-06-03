@@ -2,7 +2,7 @@
  * @Author: hanshuai
  * @Date: 2020-06-03 09:46:52
  * @Last Modified by: hanshuai
- * @Last Modified time: 2020-06-03 11:17:02
+ * @Last Modified time: 2020-06-03 11:21:55
  */
 
 /**
@@ -57,7 +57,7 @@ console.log(car3.year);
 
 function new2 () {
     con = [].shift.call(arguments);
-    // var obj = {};
+    // let obj = {};
     // obj.__proto__ = con.prototype;
     let obj = Object.create(con.prototype);
     let res = con.apply(obj, arguments);
