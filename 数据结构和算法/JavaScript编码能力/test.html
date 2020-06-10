@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            height: 30000px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container"></div>
+    <script>
+        function showTop() {
+            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+            console.log('滚动条位置' + scrollTop);
+        }
+
+        // function debounce(fn, delay) {
+        //     let timer = null;
+        //     return function () {
+        //         var args = arguments;
+        //         if (timer) clearTimeout(timer);
+        //         timer = setTimeout(() => {
+        //             fn.apply(this, args);
+        //         }, delay);
+        //     }
+        // }
+
+        function debounce(fn, delay, immediate) {
+            let timer = null;
+            return function () {
+                if (timer) clearTimeout(timer)
+
+                var args = arguments;
+                if (immediate) {
+                    if (!timer) {
+                        fn.apply(this, args);
+                    }
+                    timer = setTimeout(() => {
+                        timer = null;
+                    }, delay);
+                } else {
+                    timer = setTimeout(() => {
+                        fn.apply(this, args);
+                    }, delay);
+                }
+            }
+        }
+
+        window.onscroll = debounce(showTop, 1000, true);
+    </script>
+</body>
+
+</html>

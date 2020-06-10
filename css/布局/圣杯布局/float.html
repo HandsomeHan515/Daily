@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header,
+        .footer {
+            border: 1px solid #333;
+            background-color: #ccc;
+            text-align: center;
+        }
+
+        .main {
+            padding: 0 220px 0 200px;
+            overflow: hidden;
+        }
+
+        .main::after {
+            display: block;
+            clear: both;
+            content: "";
+            height: 0;
+            visibility: hidden;
+        }
+
+        .left,
+        .center,
+        .right {
+            position: relative;
+            float: left;
+            min-height: 100px;
+        }
+
+        .center {
+            width: 100%;
+            background-color: blue;
+        }
+
+        .left {
+            width: 200px;
+            left: -200px;
+            margin-left: -100%;
+            background-color: red;
+        }
+
+        .right {
+            width: 220px;
+            margin-left: -220px;
+            right: -220px;
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">header</div>
+        <div class="main">
+            <div class="center">center</div>
+            <div class="left">left</div>
+            <div class="right">right</div>
+        </div>
+        <div class="footer">footer</div>
+    </div>
+</body>
+
+</html>
