@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="input" type="text" placeholder="请输入...">
+    <div id="content"></div>
+    <script>
+        var input = document.getElementById('input');
+        var content = document.getElementById('content');
+        var obj = {
+            title: '123'
+        }
+
+        input.addEventListener("keyup", function (event) {
+            obj.title = event.target.value;
+        })
+
+        Object.defineProperty(obj, 'title', {
+            get() {
+
+            },
+            set(value) {
+                input.value = value;
+                content.innerText = value;
+            }
+        })
+    </script>
+</body>
+
+</html>

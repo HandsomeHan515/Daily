@@ -17,7 +17,9 @@ target = () => { total = price * quantity }
 
 record()
 target()
-price = 20
 console.log(total)
+
+price = 20
 replay()
+
 console.log(total)

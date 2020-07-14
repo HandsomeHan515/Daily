@@ -9,7 +9,7 @@ function say (age, sex) {
 say.bind(obj, 13)('男')
 
 Function.prototype.mybind = function (context) {
-    if (typeof context !== 'function') {
+    if (typeof this !== 'function') {
         throw new Error('This is not function')
     }
 
