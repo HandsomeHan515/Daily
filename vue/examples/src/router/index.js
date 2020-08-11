@@ -37,6 +37,36 @@ const routes = [
     path: '/component',
     name: 'Component',
     component: () => import('../views/Component.vue')
+  },
+  {
+    path: '/computed',
+    name: 'Computed',
+    component: () => import('../views/Computed.vue')
+  },
+  {
+    path: '/key',
+    name: 'Key',
+    component: () => import('../views/Key.vue')
+  },
+  {
+    path: '/for',
+    name: 'For',
+    component: () => import('../views/For.vue')
+  },
+  {
+    path: '/keepalive',
+    Name: 'KeepAlive',
+    component: () => import('../views/KeepAlive.vue')
+  },
+  {
+    path: '/watch',
+    name: 'Watch',
+    component: () => import('../views/Watch.vue')
+  },
+  {
+    path: '/set',
+    name: 'Set',
+    component: () => import('../views/Set.vue')
   }
 ]
 

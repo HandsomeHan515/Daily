@@ -6,7 +6,13 @@
       <router-link to="/lifecycle">Lifecycle</router-link>|
       <router-link to="/mixin">Mixin</router-link>|
       <router-link to="/eventbus">Event Bus</router-link>|
-      <router-link to="/component">Component</router-link>
+      <router-link to="/component">Component</router-link>|
+      <router-link to="/computed">computed</router-link>|
+      <router-link to="/key">Key</router-link>|
+      <router-link to="/for">For</router-link>|
+      <router-link to="/keepalive">KeepAlive</router-link>|
+      <router-link to="/watch">Watch</router-link>|
+      <router-link to="/set">Set</router-link>|
     </div>
     <router-view />
   </div>
