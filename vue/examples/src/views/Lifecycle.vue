@@ -39,6 +39,7 @@ export default {
   methods: {
     handleClick() {
       this.title = this.title === "lifecycle" ? "生命周期" : "lifecycle";
+      console.log(this.$options);
     },
   },
 };

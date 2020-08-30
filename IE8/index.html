@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    hello
+    <script>
+        function script() {
+            var script = document.createElement('script');
+
+            script.src = './index.js';
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+
+        setTimeout(function () {
+            script();
+        }, 1000);
+    </script>
+</body>
+
+</html>

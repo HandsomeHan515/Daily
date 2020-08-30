@@ -67,6 +67,11 @@ const routes = [
     path: '/set',
     name: 'Set',
     component: () => import('../views/Set.vue')
+  },
+  {
+    path: '/extend',
+    name: 'Extend',
+    component: () => import('../views/Extend.vue')
   }
 ]
 

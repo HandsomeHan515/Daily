@@ -13,6 +13,7 @@
       <router-link to="/keepalive">KeepAlive</router-link>|
       <router-link to="/watch">Watch</router-link>|
       <router-link to="/set">Set</router-link>|
+      <router-link to="/extend">Extend</router-link>|
     </div>
     <router-view />
   </div>
