@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../packages/vue.dev.js"></script>
+    <script src="./index.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <nav>
+            <router-link to="/">home</router-link>
+            <router-link to="/about">about</router-link>
+        </nav>
+        <router-view></router-view>
+        <p>{{message}}</p>
+    </div>
+    <script>
+        const Home = Vue.component('Home', {
+            data() {
+                return {
+                    title: 'HOME'
+                }
+            },
+            template: `<div>{{title}}</div>`
+        })
+
+        const About = Vue.component('About', {
+            data() {
+                return {
+                    title: 'About'
+                }
+            },
+            template: `<div>{{title}}</div>`
+        })
+
+        const router = new Router({
+            routes: [
+                {
+                    path: '/',
+                    name: 'home',
+                    component: Home
+                }, {
+                    path: '/about',
+                    name: 'about',
+                    component: About
+                }
+            ]
+        })
+
+        Vue.use(router)
+
+        new Vue({
+            data: {
+                message: 'hello world!'
+            },
+            template: `
+                <span>HELLO</span>
+            `
+        }).$mount('#app')
+    </script>
+</body>
+
+</html>
