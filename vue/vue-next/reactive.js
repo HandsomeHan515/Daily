@@ -1,168 +1,128 @@
-// // let data = { foo: 'foo' }
-// let data = [1, 2, 3,]
+let toProxy = new WeakMap()
+let toRaw = new WeakMap()
 
-// let p = new Proxy(data, {
-//     get (target, key, receiver) {
-//         console.log('get value', key)
-//         return target[key]
-//     },
-//     set (target, key, value, receiver) {
-//         console.log('set value', target, key, value)
-//         target[key] = value
-//         return true
-//     }
-// })
-
-// p.push(4)
-
-// let data = { a: { b: { c: 1 } } }
-// let p = new Proxy(data, {
-//     get (target, key, receiver) {
-//         const res = Reflect.get(target, key, receiver)
-//         console.log(res)
-//         return res
-//     },
-//     set (target, key, value, receiver) {
-//         return Reflect.set(target, key, value, receiver)
-//     }
-// })
-
-// p.a.b.c = 2
-
-// 解决多次触发 set/get
-// function reactive (data, cb) {
-//     let timer = null
-//     return new Proxy(data, {
-//         get (target, key, receiver) {
-//             return Reflect.get(target, key, receiver)
-//         },
-//         set (target, key, value, receiver) {
-//             clearTimeout(timer)
-//             timer = setTimeout(() => {
-//                 cb && cb()
-//             }, 0)
-//             return Reflect.set(target, key, value, receiver)
-//         }
-//     })
-// }
-
-// let arr = [1, 2, 3]
-// let p = reactive(arr, () => {
-//     console.log('trigger')
-// })
-
-// p.push(123)
-
-// 解决数据深度检测
-
-// function reactive (data, cb) {
-//     let timer = null
-//     let res = null
-
-//     res = data instanceof Array ? [] : {}
-
-//     for (let key in data) {
-//         if (typeof data[key] === 'object') {
-//             res[key] = reactive(data[key], cb)
-//         } else {
-//             res[key] = data[key]
-//         }
-//     }
-
-//     return new Proxy(res, {
-//         get (target, key, receiver) {
-//             return Reflect.get(target, key, receiver)
-//         },
-//         set (target, key, value, receiver) {
-//             let res = Reflect.set(target, key, value, receiver)
-//             clearTimeout(timer)
-//             timer = setTimeout(() => {
-//                 cb && cb()
-//             }, 0)
-//             return res
-//         }
-//     })
-// }
-
-// let data = { foo: 'foo', bar: [1, 2] }
-// let p = reactive(data, () => {
-//     console.log('trigger')
-// })
-// p.bar.push(3)
-
-// console.log(p)
-
-const rawToReactive = new WeakMap()
-const reactiveToRaw = new WeakMap()
-
-function isObject (val) {
-    return typeof val === 'object'
+function isObject (value) {
+    return typeof value === 'object' && value !== null
 }
 
-function hasOwn (val, key) {
-    const hasOwnProperty = Object.prototype.hasOwnProperty
-    return hasOwnProperty.call(val, key)
+function hasOwn (target, key) {
+    return target.hasOwnProperty(key)
 }
 
-//traps 
-function createGetter () {
-    return function get (target, key, receiver) {
-        const res = Reflect.get(target, key, receiver)
-        return isObject(res) ? reactive(res) : res
-    }
-}
-
-function set (target, key, val, receiver) {
-    const hadKey = hasOwn(target, key)
-    const oldValue = target[key]
-
-    val = reactiveToRaw.get(val) || val
-    const result = Reflect.set(target, key, val, receiver)
-
-    if (!hadKey) {
-        console.log('trigger')
-    } else if (val !== oldValue) {
-        console.log('trigger')
-    }
-
-    return result
-}
-
-// handle
-const mutableHandlers = {
-    get: createGetter(),
-    set: set
-}
-
-// entry 
 function reactive (target) {
-    return createReactiveObject(
-        target,
-        rawToReactive,
-        reactiveToRaw,
-        mutableHandlers
-    )
+    return createReactiveObject(target)
 }
 
-function createReactiveObject (target, toProxy, toRaw, baseHandlers) {
-    // 原数据已经有相应的可响应数据，返回可相应数据
-    let observed = toProxy.get(target)
-    if (observed !== void 666) {
-        return observed
+function createReactiveObject (target) {
+    if (!isObject(target)) {
+        return target
     }
-    // 原数据已经是可响应的
+    let proxy = toProxy.get(target)
+    if (proxy) return proxy
+
     if (toRaw.has(target)) {
         return target
     }
 
-    observed = new Proxy(target, baseHandlers)
+    let baseHandler = {
+        get (target, key, receiver) {
+            let result = Reflect.get(target, key, receiver)
+            // 收集依赖 订阅 当前 key 和 effect 对应
+            track(target, key) // 目标上的 key 变化了，让数组中的 effect 执行
+            return isObject(result) ? reactive(result) : result
+        },
+        set (target, key, value, receiver) {
+            let hadKey = hasOwn(target, key) // 之前是否存在这个 key , 不存在为新增，存在即为修改属性
+            let oldValue = target[key] // 旧值
+            let res = Reflect.set(target, key, value, receiver)
+            if (!hadKey) {
+                console.log('新增属性')
+                trigger(target, 'add', key)
+            } else if (oldValue !== value) {
+                console.log('修改属性')
+                trigger(target, 'set', key)
+            }
+            return res
+        },
+        deleteProperty (target, key) {
+            let res = Reflect.deleteProperty(target, key)
+            console.log('delete');
+            return res
+        }
+    }
+
+    let observed = new Proxy(target, baseHandler)
+
     toProxy.set(target, observed)
     toRaw.set(observed, target)
 
     return observed
 }
 
-let data = { foo: 'foo', arr: [1, 2, 3] }
+let activeEffectStacks = []
 
-let p = reactive(data)
-console.log('p', p)
+let targetMap = new WeakMap()
+function track (target, key) {
+    let effect = activeEffectStacks[activeEffectStacks.length - 1]
+    if (effect) {
+        let depsMap = targetMap.get(target)
+        if (!depsMap) {
+            targetMap.set(target, depsMap = new Map())
+        }
+        let deps = depsMap.get(key)
+        if (!deps) {
+            depsMap.set(key, deps = new Set())
+        }
+        if (!deps.has(effect)) {
+            deps.add(effect)
+        }
+    }
+}
+
+function trigger (target, key) {
+    let depsMap = targetMap.get(target)
+    if (depsMap) {
+        let deps = depsMap.get(key)
+        if (deps) {
+            deps.forEach(effect => effect())
+        }
+    }
+}
+
+function effect (fn) {
+    let effect = createReactiveEffect(fn)
+    effect()
+}
+
+function createReactiveEffect (fn) {
+    let effect = function () {
+        return run(effect, fn) // 1 让fn 执行 2 把 effect 存到栈中
+    }
+    return effect
+}
+
+
+function run (effect, fn) { // 运行 fn 并将 effect 存起来
+    try {
+        activeEffectStacks.push(effect)
+        fn()
+    } finally {
+        activeEffectStacks.pop()
+    }
+}
+
+/**
+ * 数组 push 触发 新增值和 length 的修改
+ * let proxy = reactive([1, 2, 3])
+ * proxy.push(4)
+ * proxy.length = 10
+ */
+
+
+let obj = reactive({ name: 'han' })
+effect(() => { // 执行两次，默认先执行一次，依赖数据变了，会再次执行
+    console.log(obj.name)
+})
+
+obj.name = 'handsome'
+obj.name = 'handsomes'
