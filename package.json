@@ -16,7 +16,7 @@
     "hyperscript": "^2.0.2",
     "json2graphql": "^0.1.4",
     "list-diff2": "^0.1.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "vue": "^2.6.10",
     "whatwg-fetch": "^3.6.1"
   },
