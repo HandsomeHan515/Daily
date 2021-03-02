@@ -17,7 +17,8 @@
     "json2graphql": "^0.1.4",
     "list-diff2": "^0.1.4",
     "lodash": "^4.17.15",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "whatwg-fetch": "^3.6.1"
   },
   "devDependencies": {
     "eslint": "^6.0.1",
@@ -26,5 +27,6 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0"
-  }
+  },
+  "type": "module"
 }
