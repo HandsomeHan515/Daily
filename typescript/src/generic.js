@@ -9,21 +9,33 @@ function swap(tuple) {
     return [tuple[1], tuple[0]];
 }
 console.log(swap([1, 2]));
+// 泛型变量
 function getArrayLength(arg) {
-    console.log(arg.length);
-    return arg;
+    // console.log((arg as Array<T>).length)
+    return arg.length;
 }
-getArrayLength([1, 2, 3]);
+const returnItem1 = para => para;
 // 泛型类
-var Stack = /** @class */ (function () {
-    function Stack() {
+class Stack {
+    constructor() {
         this.arr = [];
     }
-    Stack.prototype.push = function (item) {
+    push(item) {
         this.arr.push(item);
-    };
-    Stack.prototype.pop = function () {
+    }
+    pop() {
         this.arr.pop();
-    };
-    return Stack;
-}());
+    }
+}
+class Stack1 {
+    constructor() {
+        this.arr = [];
+    }
+    push(item) {
+        this.arr.push(item);
+    }
+    pop() {
+        this.arr.pop();
+    }
+}
+const stack = new Stack1();
