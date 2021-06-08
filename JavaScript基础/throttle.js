@@ -1,4 +1,4 @@
-function throttl (cb, wait) {
+function throttl(cb, wait) {
     let timer = null
     return function () {
         if (!timer) {

@@ -1,0 +1,11 @@
+<input type="file" id="input">
+<img id="img" src="" class="img" />
+
+
+
+<script>
+    var input = document.getElementById('input')
+    input.addEventListener('change', function (e) {
+        console.log(e.target.files[0]);
+    })
+</script>
