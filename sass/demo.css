@@ -1,0 +1,39 @@
+p {
+  color: red;
+}
+p span {
+  font-size: 12px;
+}
+
+h1 {
+  color: red;
+}
+
+div {
+  height: 100px;
+}
+div ul {
+  height: 80px;
+}
+div ul li {
+  height: 50px;
+}
+
+span {
+  color: red;
+}
+span a {
+  font-size: 12px;
+}
+
+.one, .two {
+  color: #000;
+}
+
+.one a, .two a {
+  font-size: 10px;
+}
+
+.two {
+  background-color: #fff;
+}

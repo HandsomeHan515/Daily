@@ -1,0 +1,53 @@
+@import 'base.scss';
+
+// 变量
+$color: red;
+$size: 12px;
+
+h1 {
+    color: $color;
+}
+
+// 嵌套
+div {
+    height: 100px;
+
+    ul {
+        height: 80px;
+
+        li {
+            height: 50px;
+        }
+    }
+}
+
+// mixin
+@mixin mixin($color, $size) {
+    color: $color;
+
+    a {
+        font-size: $size;
+    }
+}
+
+span {
+    @include mixin($color, $size);
+}
+
+// extend
+// 一个选择器可以继承另一个选择器的全部样式
+.one {
+    color: #000;
+}
+
+.one a {
+    font-size: 10px;
+}
+
+.two {
+    @extend .one;
+
+    background-color: #fff;
+}
+
+// @import
